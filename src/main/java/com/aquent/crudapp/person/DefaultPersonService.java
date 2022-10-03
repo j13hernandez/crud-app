@@ -32,6 +32,11 @@ public class DefaultPersonService implements PersonService {
     }
 
     @Override
+    public List<Person> listContacts(Integer clientId) {
+        return personDao.listContacts(clientId);
+    }
+
+    @Override
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
     public Person readPerson(Integer id) {
         return personDao.readPerson(id);

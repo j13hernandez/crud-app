@@ -10,33 +10,33 @@
       crossorigin="anonymous"
     />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Person Listing</title>
+    <title>Client Listing</title>
   </head>
   <body>
-    <h1>Person Listing</h1>
-    <p><a href="/person/create">Create New Person</a></p>
-    <th:block th:unless="${#lists.isEmpty(persons)}">
+    <h1>Client Listing</h1>
+    <p><a href="/client/create">Create New Client</a></p>
+    <th:block th:unless="${#lists.isEmpty(clients)}">
       <table>
         <thead>
           <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Email Address</th>
+            <th>Company Name</th>
+            <th>Website</th>
+            <th>Phone Number</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          <th:block th:each="person : ${persons}">
+          <th:block th:each="client : ${clients}">
             <tr>
-              <td th:text="${person.firstName}">First</td>
-              <td th:text="${person.lastName}">Last</td>
-              <td th:text="${person.emailAddress}">first.last@email.com</td>
+              <td th:text="${client.companyName}">Company Name</td>
+              <td th:text="${client.websiteUrl}">Website</td>
+              <td th:text="${client.phoneNumber}">Phone Number</td>
               <td>
-                <a th:href="'/person/edit/' + ${person.personId}"
-                  >Edit Person</a
+                <a th:href="'/client/edit/' + ${client.clientId}"
+                  >Edit Client</a
                 >
-                <a th:href="'/person/delete/' + ${person.personId}"
-                  >Delete Person</a
+                <a th:href="'/client/delete/' + ${client.clientId}"
+                  >Delete Client</a
                 >
               </td>
             </tr>
@@ -44,7 +44,7 @@
         </tbody>
       </table>
     </th:block>
-    <th:block th:if="${#lists.isEmpty(persons)}">
+    <th:block th:if="${#lists.isEmpty(clients)}">
       <p>No results found.</p>
     </th:block>
   </body>

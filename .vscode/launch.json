@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-Application<crud-app>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.aquent.crudapp.Application",
+      "projectName": "crud-app",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}

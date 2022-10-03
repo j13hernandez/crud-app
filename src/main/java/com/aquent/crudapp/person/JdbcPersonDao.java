@@ -4,6 +4,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -21,13 +23,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class JdbcPersonDao implements PersonDao {
 
     private static final String SQL_LIST_PEOPLE = "SELECT * FROM person ORDER BY first_name, last_name, person_id";
+    private static final String SQL_LIST_CONTACTS = "SELECT * FROM person WHERE client_id = :clientId";
     private static final String SQL_READ_PERSON = "SELECT * FROM person WHERE person_id = :personId";
     private static final String SQL_DELETE_PERSON = "DELETE FROM person WHERE person_id = :personId";
-    private static final String SQL_UPDATE_PERSON = "UPDATE person SET (first_name, last_name, email_address, street_address, city, state, zip_code)"
-                                                  + " = (:firstName, :lastName, :emailAddress, :streetAddress, :city, :state, :zipCode)"
+    private static final String SQL_UPDATE_PERSON = "UPDATE person SET (first_name, last_name, email_address, street_address, city, state, zip_code, client_id)"
+                                                  + " = (:firstName, :lastName, :emailAddress, :streetAddress, :city, :state, :zipCode, :clientId)"
                                                   + " WHERE person_id = :personId";
-    private static final String SQL_CREATE_PERSON = "INSERT INTO person (first_name, last_name, email_address, street_address, city, state, zip_code)"
-                                                  + " VALUES (:firstName, :lastName, :emailAddress, :streetAddress, :city, :state, :zipCode)";
+    private static final String SQL_CREATE_PERSON = "INSERT INTO person (first_name, last_name, email_address, street_address, city, state, zip_code, client_id)"
+                                                  + " VALUES (:firstName, :lastName, :emailAddress, :streetAddress, :city, :state, :zipCode, :clientId)";
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
@@ -39,6 +42,14 @@ public class JdbcPersonDao implements PersonDao {
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
     public List<Person> listPeople() {
         return namedParameterJdbcTemplate.getJdbcOperations().query(SQL_LIST_PEOPLE, new PersonRowMapper());
+    }
+
+    @Override
+    public List<Person> listContacts(Integer clientId) {
+        Map<String, Integer> parameters = new HashMap<String, Integer>();
+        parameters.put("clientId", clientId);
+        List<Person> people = namedParameterJdbcTemplate.query(SQL_LIST_CONTACTS, parameters, new PersonRowMapper());
+        return people;
     }
 
     @Override
@@ -83,6 +94,7 @@ public class JdbcPersonDao implements PersonDao {
             person.setCity(rs.getString("city"));
             person.setState(rs.getString("state"));
             person.setZipCode(rs.getString("zip_code"));
+            person.setClientId(rs.getInt("client_id"));
             return person;
         }
     }
